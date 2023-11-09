@@ -19,10 +19,29 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    const database = client.db("jobnest110");
+    const jobs = database.collection("jobs");
+    const appliedJobs = database.collection("appliedJobs");
+
+    app.get("/", (req, res) => {
+      res.send("Jobnest Server Running");
+    });
+
+    app.post("/addjob", async (req, res) => {
+      const newJob = req.body;
+      const result = await jobs.insertOne(newJob);
+      res.send(result);
+    });
+
+    app.post("/addappliedjob", async (req, res) => {
+      const newAppliedJobs = req.body;
+      const result = await appliedJobs.insertOne(newAppliedJobs);
+      res.send(result);
+    });
+
+    // await client.connect();
+    // // Send a ping to confirm a successful connection
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
@@ -30,3 +49,7 @@ async function run() {
   }
 }
 run().catch(console.dir);
+
+app.listen(port, () => {
+  console.log(`Server is running on ${port}`);
+});
