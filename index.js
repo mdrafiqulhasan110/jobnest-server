@@ -39,6 +39,26 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/jobs", async (req, res) => {
+      let query = {};
+      if (req.query.email) {
+        query = { postedEmail: req.query.email };
+      }
+      const cursor = jobs.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/appliedjobs", async (req, res) => {
+      let query = {};
+      if (req.query.email) {
+        query = { email: req.query.email };
+      }
+      const cursor = appliedJobs.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // await client.connect();
     // // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
