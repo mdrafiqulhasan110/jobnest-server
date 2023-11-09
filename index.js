@@ -72,7 +72,7 @@ async function run() {
       const options = { upset: true };
       const updatedJob = req.body;
       const job = {
-        $set: { jobBannerUrl: updatedJob.jobBannerUrl, jobTitle: updatedJob.jobTitle, companyLogo: updatedJob.companyLogo, postedBy: updatedJob.postedBy, postedEmail: updatedJob.postedEmail, jobCategory: updatedJob.jobCategory, salaryRange: updatedJob.salaryRange, jobDescription: updatedJob.jobDescription, postingDate: updatedJob.postingDate, applicationDeadline: updatedJob.applicationDeadline, jobApplicantsNumber: updatedJob.jobApplicantsNumber },
+        $set: { jobBannerURL: updatedJob.jobBannerURL, jobTitle: updatedJob.jobTitle, companyLogo: updatedJob.companyLogo, postedBy: updatedJob.postedBy, postedEmail: updatedJob.postedEmail, jobCategory: updatedJob.jobCategory, salaryRange: updatedJob.salaryRange, jobDescription: updatedJob.jobDescription, postingDate: updatedJob.postingDate, applicationDeadline: updatedJob.applicationDeadline, jobApplicantsNumber: updatedJob.jobApplicantsNumber },
       };
 
       const result = await jobs.updateOne(query, job, options);
@@ -83,6 +83,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await jobs.deleteOne(query);
+      res.send(result);
+    });
+
+    app.put("/jobs/increment/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await jobs.updateOne(query, { $inc: { jobApplicantsNumber: 1 } });
       res.send(result);
     });
 
