@@ -66,6 +66,19 @@ async function run() {
       res.send(result);
     });
 
+    app.put("/jobs/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const options = { upset: true };
+      const updatedJob = req.body;
+      const job = {
+        $set: { jobBannerUrl: updatedJob.jobBannerUrl, jobTitle: updatedJob.jobTitle, companyLogo: updatedJob.companyLogo, postedBy: updatedJob.postedBy, postedEmail: updatedJob.postedEmail, jobCategory: updatedJob.jobCategory, salaryRange: updatedJob.salaryRange, jobDescription: updatedJob.jobDescription, postingDate: updatedJob.postingDate, applicationDeadline: updatedJob.applicationDeadline, jobApplicantsNumber: updatedJob.jobApplicantsNumber },
+      };
+
+      const result = await jobs.updateOne(query, job, options);
+      res.send(result);
+    });
+
     // await client.connect();
     // // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
